@@ -1,19 +1,16 @@
-package com.noahbelton29.minecraft;
+package com.noahbelton29.minecraft.renderer;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.noahbelton29.minecraft.util.FileUtil;
+import com.noahbelton29.minecraft.util.Identifier;
 
 import static org.lwjgl.opengl.GL20.*;
 
 public class ShaderProgram {
     private final int programId;
 
-    public ShaderProgram(String vshPath, String fshPath) {
-        String vshSource = load(vshPath);
-        String fshSource = load(fshPath);
-
-        int vsh = compile(vshSource, GL_VERTEX_SHADER);
-        int fsh = compile(fshSource, GL_FRAGMENT_SHADER);
+    public ShaderProgram(Identifier vshPath, Identifier fshPath) {
+        int vsh = compile(FileUtil.loadResource(vshPath), GL_VERTEX_SHADER);
+        int fsh = compile(FileUtil.loadResource(fshPath), GL_FRAGMENT_SHADER);
 
         programId = glCreateProgram();
         glAttachShader(programId, vsh);
@@ -38,16 +35,6 @@ public class ShaderProgram {
         }
 
         return id;
-    }
-
-    private String load(String path) {
-        try {
-            var url = getClass().getClassLoader().getResource(path);
-            if (url == null) throw new RuntimeException("Shader not found: " + path);
-            return Files.readString(Paths.get(url.toURI()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void bind() {

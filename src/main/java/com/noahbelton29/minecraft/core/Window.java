@@ -1,4 +1,4 @@
-package com.noahbelton29.minecraft;
+package com.noahbelton29.minecraft.core;
 
 import org.lwjgl.opengl.*;
 
